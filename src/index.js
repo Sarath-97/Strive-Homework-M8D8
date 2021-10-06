@@ -1,29 +1,19 @@
-import express from "express"
-import cors from "cors"
-import {createServer} from "http"
-import {Server, Socket} from "socket.io"
+import express from 'express'
+import { createServer } from 'http'
+import cors from 'cors'
+import { Server } from 'socket.io'
 
+const app = express()
+app.use(cors())
+app.use(express.json())
 
+const httpServer = createServer(app)
 
-const server = express()
-const PORT = 7000
+const io = new Server(httpServer, { allowEIO3: true })
 
-server.use(cors())
-server.use(express.json())
-
-server.listen 
- 
-const httpServer = createServer(server)
-// Creating socket server
-
-const io = new Server(httpServer, {allowIEO3:true})
-
-io.on("connecton", socket => {
-    console.log(socket.id);
+io.on('connection', (socket) => {
+  console.log(`Socket ID: ${socket.id}`)
 })
-
-
-
-httpServer.listen(PORT, () =>{
-    console.log(`Sever is running on port = ${PORT}`);
+httpServer.listen(7000, () => {
+  console.log('Server is listening on Port 7000')
 })
